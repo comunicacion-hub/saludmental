@@ -1,0 +1,456 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Redes Con Rostro en CERES</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap">
+<style>
+/* Línea gráfica Mi RCR (Fundación Redes Con Rostro): fondo blanco, Outfit, degradados a 135°.
+   Layout: mapa conceptual con nodo central y 4 ramas; en tablet salen a los lados, en celular bajan en columna. */
+:root{
+  color-scheme:light;
+  --bg:#FFFFFF;
+  --surface:#F8FAFC;
+  --text:#333333;
+  --muted:#777777;
+  --navy:#002343;
+  --border:#E2E8F0;
+  --shadow-sm:0 2px 8px rgba(0,0,0,.07);
+  --shadow-md:0 4px 20px rgba(0,0,0,.10);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.14);
+  --r-md:14px;--r-lg:20px;--r-xl:28px;
+
+  /* Degradados de marca */
+  --grad-a:linear-gradient(135deg,#FF751F,#FF376F); /* coral → magenta */
+  --grad-b:linear-gradient(135deg,#33A8DE,#506CFF); /* celeste → índigo */
+  --grad-c:linear-gradient(135deg,#18AE97,#0BC3FF); /* teal → cyan */
+  --grad-d:linear-gradient(135deg,#506CFF,#0BC3FF); /* índigo → cyan */
+  --grad-e:linear-gradient(135deg,#F82D72,#FF85FF); /* rosa → magenta claro */
+
+  --font:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--font);font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+}
+.pagina{
+  max-width:1180px;margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:20px 40px;
+  display:flex;flex-direction:column;gap:28px;
+}
+
+/* Encabezado */
+.cabecera{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap}
+.cabecera img{height:52px;width:auto;display:block}
+.etiqueta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--grad-b);color:#fff;border-radius:999px;padding:7px 14px;
+  font-size:13px;font-weight:700;letter-spacing:.2px;box-shadow:var(--shadow-sm);
+}
+
+/* Mapa */
+.mapa{position:relative;display:grid;gap:18px;grid-template-columns:1fr;
+  grid-template-areas:"centro" "n0" "n1" "n2" "n3";}
+.lineas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:0}
+.lineas path{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.lineas.anim path{stroke-dasharray:1;stroke-dashoffset:1;animation:trazar 1.1s cubic-bezier(.6,.1,.2,1) forwards}
+.lineas.anim path:nth-of-type(2){animation-delay:.12s}
+.lineas.anim path:nth-of-type(3){animation-delay:.24s}
+.lineas.anim path:nth-of-type(4){animation-delay:.36s}
+@keyframes trazar{to{stroke-dashoffset:0}}
+
+.centro{
+  grid-area:centro;position:relative;z-index:1;overflow:hidden;
+  background:var(--grad-b);color:#fff;
+  border-radius:var(--r-xl);padding:26px 22px 22px;
+  display:flex;flex-direction:column;gap:14px;box-shadow:0 12px 36px rgba(80,108,255,.30);
+}
+.centro::before,.centro::after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.centro::before{width:240px;height:240px;right:-90px;top:-110px;background:rgba(255,255,255,.12)}
+.centro::after{width:160px;height:160px;left:-70px;bottom:-90px;background:rgba(11,195,255,.35)}
+.centro > *{position:relative;z-index:1}
+.centro .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;opacity:.9}
+.centro h1{margin:0;font-weight:800;font-size:clamp(26px, 6.6vw, 36px);line-height:1.12;letter-spacing:-.4px;text-wrap:balance}
+.cifras{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0;padding:0;list-style:none}
+.cifras li{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:var(--r-md);padding:10px 10px 9px;display:flex;flex-direction:column;min-width:0}
+.cifras b{font-weight:800;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.cifras span{font-size:12.5px;font-weight:500;line-height:1.25;margin-top:4px;opacity:.92}
+.pista{font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px;margin:0;opacity:.95}
+.pista svg{flex:none}
+
+.nodo{
+  position:relative;z-index:1;margin-left:46px;
+  appearance:none;font:inherit;color:inherit;text-align:left;cursor:pointer;
+  background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:16px;
+  display:grid;grid-template-columns:58px minmax(0,1fr);column-gap:14px;row-gap:4px;align-items:start;
+  box-shadow:var(--shadow-md);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.nodo:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.nodo:active{transform:scale(.985)}
+.nodo:focus-visible{outline:3px solid var(--c1);outline-offset:4px}
+.nodo:nth-of-type(1){grid-area:n0}
+.nodo:nth-of-type(2){grid-area:n1}
+.nodo:nth-of-type(3){grid-area:n2}
+.nodo:nth-of-type(4){grid-area:n3}
+.avatar{
+  grid-row:1 / span 3;width:58px;height:58px;border-radius:50%;
+  background:var(--g);color:var(--on);padding:3px;
+  display:grid;place-items:center;overflow:hidden;box-shadow:var(--shadow-sm);
+}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;border:2px solid #fff}
+.avatar svg{width:28px;height:28px}
+.pildora{
+  justify-self:start;background:var(--g);color:var(--on);
+  font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
+  border-radius:20px;padding:3px 10px;
+}
+.nodo .titulo{font-weight:700;font-size:19px;line-height:1.2;color:var(--navy);text-wrap:balance}
+.nodo .aliado{font-size:14px;color:var(--muted)}
+.nodo .aliado b{color:var(--text);font-weight:700}
+.nodo .pie{grid-column:1 / -1;margin-top:10px;padding-top:12px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nodo .cifra{display:flex;align-items:center;gap:10px;min-width:0}
+.num{
+  font-weight:800;line-height:1;font-variant-numeric:tabular-nums;
+  background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.nodo .num{font-size:32px}
+.nodo .cifra span{font-size:13.5px;line-height:1.25;color:var(--muted)}
+.nodo .abrir{flex:none;width:40px;height:40px;border-radius:50%;background:var(--g);color:var(--on);display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+.nodo .abrir svg{width:20px;height:20px}
+
+@media (min-width: 820px){
+  .pagina{padding-block:28px 48px;gap:36px}
+  .cabecera img{height:60px}
+  .mapa{
+    grid-template-columns:minmax(0,1fr) minmax(280px,.95fr) minmax(0,1fr);
+    grid-template-areas:"n0 centro n1" "n2 centro n3";
+    column-gap:clamp(56px, 7vw, 104px);row-gap:36px;align-items:center;
+  }
+  .centro{align-self:center;padding:30px 26px 26px}
+  .centro h1{font-size:clamp(28px, 2.9vw, 36px)}
+  .nodo{margin-left:0}
+}
+
+.pie-pagina{font-size:13px;color:var(--muted);text-align:center}
+
+/* Detalle */
+dialog.detalle{
+  border:0;padding:0;background:#fff;color:var(--text);
+  width:min(680px, calc(100% - 48px));max-width:none;max-height:min(90dvh, 900px);
+  border-radius:var(--r-xl);overflow:hidden;box-shadow:0 30px 80px rgba(0,35,67,.35);
+}
+dialog.detalle[open]{display:flex;flex-direction:column;animation:entrar .28s cubic-bezier(.2,.8,.2,1)}
+dialog.detalle::backdrop{background:rgba(0,35,67,.50);backdrop-filter:blur(4px)}
+@keyframes entrar{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
+.det-scroll{overflow-y:auto;overscroll-behavior:contain;flex:1 1 auto;min-height:0}
+.foto{position:relative;margin:0;aspect-ratio:16 / 10;max-width:100%;background:var(--g);overflow:hidden;touch-action:pan-y}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.foto .vacia{
+  position:absolute;inset:0;display:grid;place-items:center;color:var(--on);
+  background:
+    radial-gradient(circle at 15% 115%, rgba(255,255,255,.22) 0 30%, transparent 30.5%),
+    radial-gradient(circle at 95% -12%, rgba(255,255,255,.18) 0 32%, transparent 32.5%),
+    var(--g);
+}
+.foto .vacia div{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:16px}
+.foto .vacia svg{width:76px;height:76px;stroke-width:1.6}
+.foto.sin-foto{aspect-ratio:auto;height:150px}
+.foto.sin-foto .vacia svg{width:64px;height:64px}
+.cerrar{
+  position:absolute;top:12px;right:12px;z-index:2;width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;
+  background:rgba(255,255,255,.96);color:var(--navy);display:grid;place-items:center;box-shadow:var(--shadow-md);
+}
+.cerrar:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
+.det-cuerpo{padding:22px 24px 8px;display:flex;flex-direction:column;gap:10px}
+.det-cuerpo .pildora{font-size:12px;padding:4px 12px}
+.det-cuerpo h2{margin:2px 0 0;font-weight:800;font-size:clamp(26px, 6vw, 34px);line-height:1.12;letter-spacing:-.3px;color:var(--navy);text-wrap:balance}
+.det-cuerpo .aliado{margin:0;font-size:16px;color:var(--muted)}
+.det-cuerpo .aliado b{color:var(--text)}
+.det-cuerpo p.texto{margin:6px 0 0;font-size:18px;line-height:1.55;max-width:60ch}
+.datos{margin:10px 0 14px;display:grid;grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));gap:10px}
+.datos div{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px;min-width:0}
+.datos dt{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+.datos dd{margin:4px 0 0;font-weight:600;line-height:1.3;color:var(--navy)}
+.datos dd .num{font-size:36px;display:inline-block}
+.datos dd small{display:block;font-size:14px;font-weight:500;color:var(--muted);margin-top:4px;line-height:1.3}
+.det-nav{
+  flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom, 0px));border-top:1px solid var(--border);background:#fff;
+}
+.det-nav button{
+  appearance:none;font:inherit;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--navy);
+  border-radius:999px;min-height:44px;padding:0 16px;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:15px;
+}
+.det-nav button:hover{background:var(--surface)}
+.det-nav button:focus-visible{outline:3px solid var(--c1);outline-offset:2px}
+.puntos{display:flex;gap:6px;align-items:center}
+.puntos i{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.puntos i.activo{background:var(--g);width:24px;border-radius:8px}
+
+@media (max-width: 640px){
+  dialog.detalle{width:100%;margin:auto 0 0;max-height:94dvh;border-radius:26px 26px 0 0}
+  @keyframes entrar{from{transform:translateY(100%)}to{transform:none}}
+  .foto{aspect-ratio:4 / 3}
+  .foto.sin-foto{aspect-ratio:auto;height:130px}
+  .det-cuerpo{padding:20px 18px 6px}
+  .det-nav .txt{display:none}
+  .det-nav button{padding:0 14px}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .lineas.anim path{stroke-dashoffset:0}
+}
+</style>
+
+<div class="pagina">
+  <header class="cabecera">
+    <img src="rcr.png" alt="Fundación Redes Con Rostro">
+    <span class="etiqueta">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.5l-7.6-7.6a4.6 4.6 0 0 1 6.5-6.5L12 7.5l1.1-1.1a4.6 4.6 0 0 1 6.5 6.5z"/></svg>
+      Salud mental y cuidado
+    </span>
+  </header>
+
+  <main class="mapa" id="mapa">
+    <svg class="lineas" id="lineas" aria-hidden="true"></svg>
+
+    <section class="centro" id="centro" aria-labelledby="titulo">
+      <span class="eyebrow">Vicepresidencia de la República</span>
+      <h1 id="titulo">Redes Con Rostro presente en las Mesas Intersectoriales CERES</h1>
+      <ul class="cifras">
+        <li><b>4</b><span>actividades</span></li>
+        <li><b>3</b><span>aliados</span></li>
+        <li><b>41</b><span>participantes aprox.</span></li>
+      </ul>
+      <p class="pista">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V6a2 2 0 0 1 4 0v5"/><path d="M13 10a2 2 0 0 1 4 0v1a2 2 0 0 1 3 1.7V15a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-4.6-2.2L5 15.4a1.8 1.8 0 0 1 2.8-2.2L9 14.5"/></svg>
+        Toca una actividad para ver el detalle
+      </p>
+    </section>
+    <!-- nodos generados por script -->
+  </main>
+
+</div>
+
+<dialog class="detalle" id="detalle" aria-labelledby="det-titulo">
+  <div class="det-scroll">
+    <figure class="foto" id="det-foto"></figure>
+    <div class="det-cuerpo">
+      <span class="pildora" id="det-tipo"></span>
+      <h2 id="det-titulo"></h2>
+      <p class="aliado" id="det-aliado"></p>
+      <p class="texto" id="det-texto"></p>
+      <dl class="datos" id="det-datos"></dl>
+    </div>
+  </div>
+  <nav class="det-nav" aria-label="Cambiar de actividad">
+    <button type="button" id="det-prev" aria-label="Actividad anterior">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span class="txt">Anterior</span>
+    </button>
+    <span class="puntos" id="det-puntos" aria-hidden="true"></span>
+    <button type="button" id="det-next" aria-label="Actividad siguiente">
+      <span class="txt">Siguiente</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </nav>
+</dialog>
+
+<script>
+(function(){
+  var ICONOS = {
+    mente:'<path d="M9 21v-3.2A7.5 7.5 0 1 1 19 10.5c0 1.3.6 2.2 1.4 3.1L19 14.6V17a2 2 0 0 1-2 2h-2v2"/><path d="M11.6 13.6l-2.3-2.3a1.5 1.5 0 0 1 2.3-1.9 1.5 1.5 0 0 1 2.3 1.9z"/>',
+    circulo:'<circle cx="12" cy="12" r="7.2" stroke-dasharray="2 3"/><circle cx="12" cy="4.6" r="2.1"/><circle cx="19" cy="9.7" r="2.1"/><circle cx="16.3" cy="18" r="2.1"/><circle cx="7.7" cy="18" r="2.1"/><circle cx="5" cy="9.7" r="2.1"/>',
+    formacion:'<circle cx="12" cy="9" r="5.6"/><path d="M12 6.6v4.8M9.6 9h4.8"/><path d="M8.4 13.4L7 21l5-2.8 5 2.8-1.4-7.6"/>',
+    cuidado:'<path d="M3 11l9-7 9 7"/><path d="M5 9.6V20h14V9.6"/><path d="M12 17.4l-2.5-2.5a1.6 1.6 0 0 1 2.5-2 1.6 1.6 0 0 1 2.5 2z"/>'
+  };
+  function icono(nombre){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONOS[nombre]+'</svg>';
+  }
+
+  // Degradados de marca por actividad: [inicio, fin, color del texto encima]
+  var GRADS = {
+    c:['#18AE97','#0BC3FF','#FFFFFF'],
+    e:['#F82D72','#FF85FF','#FFFFFF'],
+    d:['#506CFF','#0BC3FF','#FFFFFF'],
+    a:['#FF751F','#FF376F','#FFFFFF']
+  };
+
+  // Para agregar fotos: publica la imagen junto a la página (p. ej. fotos/taller-salud-mental.jpg) y pon su ruta en "foto".
+  var ACTIVIDADES = [
+    { id:'taller-salud-mental', grad:'c', icono:'mente', foto:'fotos/taller-salud-mental.webp', pos:'center 68%',
+      tipo:'Taller', titulo:'Taller de Salud Mental', aliado:'Difare',
+      cifra:'24', unidad:'recicladoras y recicladores de base', aprox:true,
+      texto:'En este espacio participaron alrededor de 24 recicladoras y recicladores de base de Guayaquil del programa ReCircula, de Tesalia CBC y Redes Con Rostro.',
+      datos:[['Lugar','Guayaquil'],['Programa','ReCircula · Tesalia CBC y Redes Con Rostro']] },
+    { id:'circulo-de-mujeres', grad:'e', icono:'circulo', foto:'fotos/circulo-de-mujeres.webp', pos:'center 55%',
+      tipo:'Círculo de cuidados', titulo:'Círculo de Mujeres', aliado:'ChildFund',
+      cifra:'5', unidad:'recicladoras de base',
+      texto:'Se realizó un círculo de cuidados con 5 recicladoras de base en la Isla Trinitaria de Guayaquil.',
+      datos:[['Lugar','Isla Trinitaria, Guayaquil']] },
+    { id:'proceso-formativo', grad:'d', icono:'formacion', foto:null,
+      tipo:'Formación · PAP', titulo:'Proceso formativo', aliado:'ChildFund',
+      cifra:'6', unidad:'colaboradores certificados',
+      texto:'6 colaboradores de Redes Con Rostro se certificaron en Primeros Auxilios Psicológicos (PAP).',
+      datos:[['Certificación','Primeros Auxilios Psicológicos (PAP)']] },
+    { id:'espacios-cuidadores', grad:'a', icono:'cuidado', foto:'fotos/espacios-cuidadores.webp', pos:'30% 62%',
+      tipo:'Taller vivencial', titulo:'“Espacios Cuidadores”', aliado:'Agzulasa',
+      cifra:'6', unidad:'colaboradores de Agzulasa',
+      texto:'Un encuentro con 6 colaboradores de Agzulasa a favor de la salud mental y el cuidado.',
+      datos:[['Enfoque','Salud mental y cuidado']] }
+  ];
+
+  var mapa = document.getElementById('mapa');
+  var centro = document.getElementById('centro');
+  var svg = document.getElementById('lineas');
+  var dlg = document.getElementById('detalle');
+  var nodos = [];
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function vars(a){
+    var g = GRADS[a.grad];
+    return '--g:linear-gradient(135deg,'+g[0]+','+g[1]+');--c1:'+g[0]+';--c2:'+g[1]+';--on:'+g[2];
+  }
+
+  ACTIVIDADES.forEach(function(a, i){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'nodo';
+    b.id = 'nodo-' + a.id;
+    b.setAttribute('style', vars(a));
+    b.setAttribute('aria-label', a.titulo + ', junto con ' + a.aliado + '. Ver detalle');
+    b.innerHTML =
+      '<span class="avatar">' + (a.foto ? '<img src="'+esc(a.foto)+'" alt="">' : icono(a.icono)) + '</span>' +
+      '<span class="pildora">' + esc(a.tipo) + '</span>' +
+      '<span class="titulo">' + esc(a.titulo) + '</span>' +
+      '<span class="aliado">Junto con <b>' + esc(a.aliado) + '</b></span>' +
+      '<span class="pie"><span class="cifra"><b class="num">' + (a.aprox ? '≈' : '') + esc(a.cifra) + '</b><span>' + esc(a.unidad) + '</span></span>' +
+      '<span class="abrir" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>';
+    b.addEventListener('click', function(){ abrir(i); });
+    mapa.appendChild(b);
+    nodos.push(b);
+  });
+
+  /* Ramas del mapa, trazadas con el degradado de cada actividad */
+  var ancho = window.matchMedia('(min-width: 820px)');
+  var primera = true;
+  function dibujar(){
+    var m = mapa.getBoundingClientRect();
+    var c = centro.getBoundingClientRect();
+    var defs = '', paths = '', puntos = '';
+    var cy = c.top + c.height / 2 - m.top;
+    nodos.forEach(function(n, i){
+      var r = n.getBoundingClientRect();
+      var g = GRADS[ACTIVIDADES[i].grad];
+      var d, sx, sy, ex, ey;
+      if (ancho.matches) {
+        var izq = r.right <= c.left + 1;
+        ey = r.top + r.height / 2 - m.top;
+        sy = cy + (ey < cy ? -34 : 34);
+        sx = izq ? c.left - m.left : c.right - m.left;
+        ex = izq ? r.right - m.left : r.left - m.left;
+        var mx = (sx + ex) / 2;
+        d = 'M'+sx+' '+sy+' C'+mx+' '+sy+' '+mx+' '+ey+' '+ex+' '+ey;
+        puntos += '<circle cx="'+sx+'" cy="'+sy+'" r="5" fill="#FFFFFF" stroke="'+g[0]+'" stroke-width="3"/>';
+      } else {
+        sx = 8 + (nodos.length - 1 - i) * 7;
+        sy = c.bottom - m.top - 14;
+        ex = r.left - m.left;
+        ey = r.top - m.top + 45;
+        var rad = 12;
+        d = 'M'+sx+' '+sy+' V'+(ey - rad)+' Q'+sx+' '+ey+' '+(sx + rad)+' '+ey+' H'+ex;
+      }
+      defs += '<linearGradient id="gl'+i+'" gradientUnits="userSpaceOnUse" x1="'+sx+'" y1="'+sy+'" x2="'+ex+'" y2="'+ey+'">' +
+              '<stop offset="0" stop-color="'+g[0]+'"/><stop offset="1" stop-color="'+g[1]+'"/></linearGradient>';
+      paths = '<path pathLength="1" d="'+d+'" stroke="url(#gl'+i+')"/>' + paths;
+      puntos += '<circle cx="'+ex+'" cy="'+ey+'" r="5.5" fill="'+g[1]+'"/>';
+    });
+    svg.innerHTML = '<defs>'+defs+'</defs>' + paths + puntos;
+    if (primera) { svg.classList.add('anim'); primera = false; }
+    else svg.classList.remove('anim');
+  }
+  var pendiente = 0;
+  function programar(){ cancelAnimationFrame(pendiente); pendiente = requestAnimationFrame(dibujar); }
+  if ('ResizeObserver' in window) new ResizeObserver(programar).observe(mapa);
+  window.addEventListener('resize', programar);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(programar);
+  dibujar();
+
+  /* Detalle */
+  var actual = -1;
+  var $ = function(id){ return document.getElementById(id); };
+  var puntos = $('det-puntos');
+  puntos.innerHTML = ACTIVIDADES.map(function(){ return '<i></i>'; }).join('');
+
+  function pintar(i){
+    var a = ACTIVIDADES[i];
+    actual = i;
+    dlg.setAttribute('style', vars(a));
+    $('det-foto').innerHTML =
+      '<button type="button" class="cerrar" id="det-cerrar" aria-label="Cerrar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
+      (a.foto
+        ? '<img src="'+esc(a.foto)+'" alt="'+esc(a.titulo)+' junto con '+esc(a.aliado)+'" style="object-position:'+esc(a.pos || 'center')+'">'
+        : '<div class="vacia"><div>'+icono(a.icono)+'</div></div>');
+    $('det-foto').classList.toggle('sin-foto', !a.foto);
+    $('det-cerrar').addEventListener('click', cerrar);
+    $('det-tipo').textContent = a.tipo;
+    $('det-titulo').textContent = a.titulo;
+    $('det-aliado').innerHTML = 'Junto con <b>' + esc(a.aliado) + '</b>';
+    $('det-texto').textContent = a.texto;
+    var datos = '<div><dt>Participantes</dt><dd><span class="num">' + (a.aprox ? '≈' : '') + esc(a.cifra) + '</span><small>' + esc(a.unidad) + '</small></dd></div>';
+    datos += '<div><dt>Aliado</dt><dd>' + esc(a.aliado) + '</dd></div>';
+    a.datos.forEach(function(p){ datos += '<div><dt>'+esc(p[0])+'</dt><dd>'+esc(p[1])+'</dd></div>'; });
+    $('det-datos').innerHTML = datos;
+    Array.prototype.forEach.call(puntos.children, function(el, k){ el.className = k === i ? 'activo' : ''; });
+    dlg.querySelector('.det-scroll').scrollTop = 0;
+    try { history.replaceState(null, '', '#' + a.id); } catch(e) {}
+  }
+  function abrir(i){
+    pintar(i);
+    if (!dlg.open) { try { dlg.showModal(); } catch(e) { dlg.setAttribute('open', ''); } }
+    var c = $('det-cerrar'); if (c) c.focus();
+  }
+  function cerrar(){ if (dlg.open) dlg.close(); }
+  function mover(paso){ pintar((actual + paso + ACTIVIDADES.length) % ACTIVIDADES.length); }
+
+  $('det-prev').addEventListener('click', function(){ mover(-1); });
+  $('det-next').addEventListener('click', function(){ mover(1); });
+  dlg.addEventListener('click', function(e){ if (e.target === dlg) cerrar(); });
+  dlg.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight') { e.preventDefault(); mover(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); mover(-1); }
+  });
+  dlg.addEventListener('close', function(){
+    var n = nodos[actual];
+    try { history.replaceState(null, '', location.pathname + location.search); } catch(e) {}
+    if (n) n.focus();
+  });
+
+  // Deslizar la foto para cambiar de actividad
+  var x0 = null, y0 = null;
+  $('det-foto').addEventListener('touchstart', function(e){ x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, {passive:true});
+  $('det-foto').addEventListener('touchend', function(e){
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) mover(dx < 0 ? 1 : -1);
+    x0 = null;
+  });
+
+  function desdeHash(){
+    var id = location.hash.slice(1);
+    var i = ACTIVIDADES.findIndex(function(a){ return a.id === id; });
+    if (i >= 0) abrir(i); else cerrar();
+  }
+  window.addEventListener('hashchange', desdeHash);
+  if (location.hash) desdeHash();
+})();
+</script>
+
+</body></html>
